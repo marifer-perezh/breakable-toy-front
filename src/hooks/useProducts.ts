@@ -1,16 +1,17 @@
 import { useState, useEffect } from 'react';
 import { Product, ProductFormData } from '../types/Product';
-import { getProducts, createProduct, deleteProduct } from '../services/api';
+import { getProducts, createProduct, deleteProduct, updateProduct } from '../services/api';
 
 export const useProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  //const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const data = await getProducts(); // ← Esto ahora retorna Product[]
+      const data = await getProducts(); //Esto ahora retorna Product[]
       setProducts(data);
     } catch (err) {
       setError('Error loading products');
@@ -40,6 +41,21 @@ export const useProducts = () => {
     }
   };
 
+  const editProduct = async (id: string, updatedProduct: ProductFormData) => {
+    try{
+      const updated = await updateProduct(id, updatedProduct);
+      //setProducts(prev => [...prev, updated]);
+      setProducts(prev => ({
+        ...prev,
+        data: prev.map(p => (p.id === id ? updated : p))
+      }));
+    }
+    catch(err){
+      setError('Error updating product');
+      throw err;
+    }
+  }
+
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -50,6 +66,7 @@ export const useProducts = () => {
     error,
     fetchProducts,
     addProduct,
-    deleteProduct: removeProduct
+    deleteProduct: removeProduct,
+    editProduct
   };
 };

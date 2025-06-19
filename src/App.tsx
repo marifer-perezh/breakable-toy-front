@@ -5,7 +5,7 @@ import ProductTable from './components/products/ProductTable';
 import ProductFilters from './components/products/ProductFilters';
 import { Product } from './types/Product';
 import ProductFormModal from './components/products/ProductFormModal';
-
+import { updateProduct } from './services/api';
 
 function App() {
   const {
@@ -19,10 +19,21 @@ function App() {
 
   const[showModal, setShowModal] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  
 
   useEffect(() => {
     setFilteredProducts(products);
   }, [products]);
+
+  const handleEdit = async (id: string, updated: Product) =>{
+    try{
+      await updateProduct(id, updated);
+      await fetchProducts();
+    }catch(error){
+      console.error("Error updating product: ",error);
+    }
+
+  }
 
   if (loading) return <div className="text-center text-gray-600 py-6">Loading products...</div>;
   if (error) return <div className="text-center text-red-500 py-6">{error}</div>;
@@ -40,15 +51,18 @@ return (
         </button>
       </div>
 
-      {showModal && (
-        <ProductFormModal
-          onSubmit={addProduct}
-          onClose={() => setShowModal(false)}
-        />
-      )}
+{showModal && (
+  <ProductFormModal
+    onSubmit={(data) => {
+      console.log("🧪 Modal creation form submitted", data);
+      return addProduct(data);
+    }}
+    onClose={() => setShowModal(false)}
+  />
+)}
 
       <ProductFilters products={products} onFilter={setFilteredProducts} />
-      <ProductTable products={filteredProducts} onDelete={deleteProduct} />
+      <ProductTable products={filteredProducts} onDelete={deleteProduct} onEdit={handleEdit}/>
     </div>
   );
 }

@@ -21,6 +21,11 @@ export const createProduct = async (product: any) => {
 export const deleteProduct = async (id: string) => {
   await API.delete(`/products/${id}`);
 };
+
+export const updateProduct = async (id: string, updatedProduct: ProductFormData) => {
+  const res = await API.put(`/products/${id}`,updatedProduct);
+  return res.data;
+}
 /*
 const API_BASE_URL = 'http://localhost:9090/products';
 

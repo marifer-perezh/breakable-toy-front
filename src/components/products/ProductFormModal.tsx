@@ -104,7 +104,7 @@ const ProductFormModal: React.FC<Props> = ({ onSubmit, onClose }) => {
             type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
           >
-            Guardar Producto
+            Save Product
           </button>
         </form>
       </div>
