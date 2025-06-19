@@ -12,43 +12,20 @@ function App() {
     products,
     loading,
     error,
+    filteredProducts,
     addProduct,
     deleteProduct,
     fetchProducts,
-    editProduct
+    editProduct,
+    filterAvailable,
+    sortByName,
+    resetFilters,
+    setFilteredProducts
   } = useProducts();
 
   //Estados
   const[showModal, setShowModal] = useState(false);
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   
-  useEffect(() => {
-    setFilteredProducts(products);
-  }, [products]);
-
-  //Funciones
-  const handleEdit = async (id: string, updated: Product) =>{
-    try{
-      await updateProduct(id, updated);
-      await fetchProducts();
-    }catch(error){
-      console.error("Error updating product: ",error);
-    }
-
-  }
-
-  const filterAvailable = () => {
-    setFilteredProducts(products.filter(p => p.quantityInStock > 0));
-  };
-
-  const sortByName = () => {
-    setFilteredProducts([...products].sort((a, b) => a.name.localeCompare(b.name)));
-  };
-
-  const resetFilters = () => {
-    setFilteredProducts(products);
-  };
-
   if (loading) return <div className="text-center text-gray-600 py-6">Loading products...</div>;
   if (error) return <div className="text-center text-red-500 py-6">{error}</div>;
 
@@ -77,7 +54,7 @@ return (
       )}
 
       <ProductFilters products={products} onFilter={setFilteredProducts} />
-      <ProductTable products={filteredProducts} onDelete={deleteProduct} onEdit={handleEdit}/>
+      <ProductTable products={filteredProducts} onDelete={deleteProduct} onEdit={editProduct}/>
     </div>
   );
 }

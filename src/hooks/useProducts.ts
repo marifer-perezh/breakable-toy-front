@@ -6,6 +6,8 @@ export const useProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+    
 
   const fetchProducts = async () => {
     try {
@@ -19,6 +21,10 @@ export const useProducts = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   const addProduct = async (product: ProductFormData) => {
     try {
@@ -40,32 +46,43 @@ export const useProducts = () => {
     }
   };
 
-  const editProduct = async (id: string, updatedProduct: ProductFormData) => {
-    try{
-      const updated = await updateProduct(id, updatedProduct);
-      //setProducts(prev => [...prev, updated]);
-      setProducts(prev => ({
-        ...prev,
-        data: prev.map(p => (p.id === id ? updated : p))
-      }));
-    }
-    catch(err){
-      setError('Error updating product');
-      throw err;
-    }
-  }
+  const editProduct = async (id: string, updated: Product) => {
+     try{
+       await updateProduct(id, updated);
+       await fetchProducts();
+     }catch(error){
+       console.error("Error updating product: ",error);
+     }
+ 
+   }
+  const filterAvailable = () => {
+    setFilteredProducts(products.filter(p => p.quantityInStock > 0));
+  };
+
+  const sortByName = () => {
+    setFilteredProducts([...products].sort((a, b) => a.name.localeCompare(b.name)));
+  };
+
+  const resetFilters = () => {
+    setFilteredProducts(products);
+  };
 
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    setFilteredProducts(products);
+  }, [products]);
 
   return {
     products,
     loading,
     error,
+    filteredProducts,
     fetchProducts,
     addProduct,
     deleteProduct: removeProduct,
-    editProduct
+    editProduct,
+    filterAvailable,
+    sortByName,
+    resetFilters,
+    setFilteredProducts
   };
 };
