@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ProductResponse, ProductFormData, Product } from '../types/Product';
+import { ProductFormData, Product } from '../types/Product';
 
 const API = axios.create({
   baseURL: 'http://localhost:9090',

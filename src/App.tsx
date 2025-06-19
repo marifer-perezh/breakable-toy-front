@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useProducts } from './hooks/useProducts';
-import ProductForm from './components/products/ProductForm';
 import ProductTable from './components/products/ProductTable';
 import ProductFilters from './components/products/ProductFilters';
-import { Product } from './types/Product';
 import ProductFormModal from './components/products/ProductFormModal';
+
 import { updateProduct } from './services/api';
+import { useProducts } from './hooks/useProducts';
+import { Product } from './types/Product';
 
 function App() {
   const {
@@ -14,17 +14,19 @@ function App() {
     error,
     addProduct,
     deleteProduct,
-    fetchProducts
+    fetchProducts,
+    editProduct
   } = useProducts();
 
+  //Estados
   const[showModal, setShowModal] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   
-
   useEffect(() => {
     setFilteredProducts(products);
   }, [products]);
 
+  //Funciones
   const handleEdit = async (id: string, updated: Product) =>{
     try{
       await updateProduct(id, updated);
@@ -34,6 +36,18 @@ function App() {
     }
 
   }
+
+  const filterAvailable = () => {
+    setFilteredProducts(products.filter(p => p.quantityInStock > 0));
+  };
+
+  const sortByName = () => {
+    setFilteredProducts([...products].sort((a, b) => a.name.localeCompare(b.name)));
+  };
+
+  const resetFilters = () => {
+    setFilteredProducts(products);
+  };
 
   if (loading) return <div className="text-center text-gray-600 py-6">Loading products...</div>;
   if (error) return <div className="text-center text-red-500 py-6">{error}</div>;
@@ -50,16 +64,17 @@ return (
           New Product
         </button>
       </div>
-
-{showModal && (
-  <ProductFormModal
-    onSubmit={(data) => {
-      console.log("🧪 Modal creation form submitted", data);
-      return addProduct(data);
-    }}
-    onClose={() => setShowModal(false)}
-  />
-)}
+      <div className="flex flex-wrap gap-4 my-4">
+        <button onClick={filterAvailable} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Only Available</button>
+        <button onClick={sortByName} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Sort A-Z</button>
+        <button onClick={resetFilters} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Reset</button>
+      </div>
+      {showModal && (
+        <ProductFormModal
+          onSubmit={addProduct}
+          onClose={() => setShowModal(false)}
+        />
+      )}
 
       <ProductFilters products={products} onFilter={setFilteredProducts} />
       <ProductTable products={filteredProducts} onDelete={deleteProduct} onEdit={handleEdit}/>

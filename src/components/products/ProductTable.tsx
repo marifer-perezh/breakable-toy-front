@@ -31,12 +31,6 @@ const ProductTable: React.FC<Props> = ({ products = [], onDelete, onEdit }) => {
     }));
   };
 
-  const handleSave = () => {
-    if (!editingId || !editData) return;
-    onEdit(editingId, editData as Product);
-    cancelEdit();
-  };
-
   return (
     <div className="overflow-x-auto rounded-md shadow-md">
       <table className="min-w-full bg-white border border-gray-200 text-sm">

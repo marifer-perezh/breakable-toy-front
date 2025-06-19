@@ -43,7 +43,7 @@ const ProductFormModal: React.FC<Props> = ({ onSubmit, onClose }) => {
           ×
         </button>
 
-        <h3 className="text-lg font-semibold mb-4">Agregar Producto</h3>
+        <h3 className="text-lg font-semibold mb-4">Add Product</h3>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium">Nombre</label>
