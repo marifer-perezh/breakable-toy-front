@@ -13,14 +13,13 @@ function App() {
     loading,
     error,
     filteredProducts,
+    sortCriteria,
+    toggleSort,
     addProduct,
     deleteProduct,
-    fetchProducts,
     editProduct,
-    filterAvailable,
-    sortByName,
     resetFilters,
-    setFilteredProducts
+    applyFilters
   } = useProducts();
 
   //Estados
@@ -41,20 +40,9 @@ return (
           New Product
         </button>
       </div>
-      <div className="flex flex-wrap gap-4 my-4">
-        <button onClick={filterAvailable} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Only Available</button>
-        <button onClick={sortByName} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Sort A-Z</button>
-        <button onClick={resetFilters} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Reset</button>
-      </div>
-      {showModal && (
-        <ProductFormModal
-          onSubmit={addProduct}
-          onClose={() => setShowModal(false)}
-        />
-      )}
-
-      <ProductFilters products={products} onFilter={setFilteredProducts} />
-      <ProductTable products={filteredProducts} onDelete={deleteProduct} onEdit={editProduct}/>
+      {showModal && (<ProductFormModal onSubmit={addProduct} onClose={() => setShowModal(false)}/>)}
+      <ProductFilters products={products} onFilter={applyFilters} onReset={resetFilters}/>
+      <ProductTable products={filteredProducts} onDelete={deleteProduct} onEdit={editProduct} toggleSort={toggleSort} sortCriteria={sortCriteria}/>
     </div>
   );
 }
