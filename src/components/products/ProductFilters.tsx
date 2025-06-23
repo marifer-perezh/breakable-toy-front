@@ -38,7 +38,7 @@ const ProductFilters: React.FC<Props> = ({ products, onFilter, onReset }) => {
   };
 
   return (
-    <div className="bg-gray-50 p-4 rounded shadow mb-6">
+    <div className="bg-gray-50 p-4 rounded shadow">
       <h3 className="text-lg font-semibold mb-3">Filters</h3>
 
       <div className="mb-3">

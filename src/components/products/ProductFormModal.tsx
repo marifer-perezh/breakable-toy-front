@@ -46,7 +46,7 @@ const ProductFormModal: React.FC<Props> = ({ onSubmit, onClose }) => {
         <h3 className="text-lg font-semibold mb-4">Add Product</h3>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium">Nombre</label>
+            <label className="block text-sm font-medium">Name</label>
             <input
               name="name"
               value={formData.name}
@@ -56,7 +56,7 @@ const ProductFormModal: React.FC<Props> = ({ onSubmit, onClose }) => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium">Categoría</label>
+            <label className="block text-sm font-medium">Category</label>
             <input
               name="category"
               value={formData.category}
@@ -66,7 +66,7 @@ const ProductFormModal: React.FC<Props> = ({ onSubmit, onClose }) => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium">Precio</label>
+            <label className="block text-sm font-medium">Price</label>
             <input
               name="unitPrice"
               type="number"
@@ -91,7 +91,7 @@ const ProductFormModal: React.FC<Props> = ({ onSubmit, onClose }) => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium">Fecha de vencimiento (opcional)</label>
+            <label className="block text-sm font-medium">Expiration Date (optional)</label>
             <input
               name="expirationDate"
               type="date"

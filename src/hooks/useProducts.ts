@@ -179,6 +179,7 @@ const applySort = (data: Product[]) => {
   setFilteredProducts(result);
 }, [products, sortCriteria]);
 
+
   return {
     products,
     loading,

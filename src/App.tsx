@@ -19,7 +19,7 @@ function App() {
     deleteProduct,
     editProduct,
     resetFilters,
-    applyFilters
+    applyFilters,
   } = useProducts();
 
   //Estados
@@ -29,20 +29,17 @@ function App() {
   if (error) return <div className="text-center text-red-500 py-6">{error}</div>;
 
 return (
-    <div className="p-6 max-w-6xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4 text-center">Inventory Manager</h1>
-
-      <div className="flex justify-end mb-4">
-        <button
+    <div className="p-6 max-w-7xl mx-auto">
+      <h1  className="text-2xl font-bold mb-4 text-center">Inventory Manager</h1>
+      {showModal && (<ProductFormModal onSubmit={addProduct} onClose={() => setShowModal(false)}/>)}
+      <ProductFilters products={products} onFilter={applyFilters} onReset={resetFilters}/>
+      <button
           onClick={() => setShowModal(true)}
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition my-6"
         >
           New Product
         </button>
-      </div>
-      {showModal && (<ProductFormModal onSubmit={addProduct} onClose={() => setShowModal(false)}/>)}
-      <ProductFilters products={products} onFilter={applyFilters} onReset={resetFilters}/>
-      <ProductTable products={filteredProducts} onDelete={deleteProduct} onEdit={editProduct} toggleSort={toggleSort} sortCriteria={sortCriteria}/>
+      <ProductTable products={filteredProducts} onDelete={deleteProduct} onEdit={editProduct}toggleSort={toggleSort} sortCriteria={sortCriteria}/>
     </div>
   );
 }
