@@ -4,9 +4,7 @@ import ProductFilters from './components/products/ProductFilters';
 import ProductFormModal from './components/products/ProductFormModal';
 import ProductMetrics from './components/products/ProductMetrics';
 
-import { updateProduct } from './services/api';
 import { useProducts } from './hooks/useProducts';
-import { Product } from './types/Product';
 
 function App() {
   const {
@@ -16,19 +14,15 @@ function App() {
     addProduct,
     deleteProduct,
     editProduct,
-    //metrics,
     fetchMetrics,
-    //filteredProducts,
     sortCriteria,
     toggleSort,
     applyFilters,
     fetchProducts,
     resetFilters,
-    //revisar, eliminar
     fetchProductsPage,
     currentPage,
     totalPages,
-    setCurrentPage,
 
   } = useProducts();
 

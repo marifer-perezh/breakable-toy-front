@@ -22,7 +22,6 @@ export const useProducts = () => {
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);  
-  //const [sortCriteria, setSortCriteria] = useState<{column: keyof Product; direction: 'asc' | 'desc'}[]>([]); 
   
   //Metodos convencionales :)
   const addProduct = async (product: ProductFormData) => {
@@ -86,8 +85,8 @@ export const useProducts = () => {
 
     const data = await getProductsFiltered(filters);
     setProducts(data.content);
-    setTotalPages(data.totalPages); // importante si estás usando paginación
-    setCurrentPage(data.number);    // para mantener actualizado el número de página
+    setTotalPages(data.totalPages); 
+    setCurrentPage(data.number);    //mantener actualizado el número de página
   } catch (err) {
     console.error(" Error fetching products", err);
     setError('Error loading products');
@@ -128,8 +127,6 @@ export const useProducts = () => {
     setPage(0);
   }
 
-
-    //Proximos a eliminar
     const fetchProductsPage = async (index: number) => {
     try {
       setLoading(true);
@@ -164,9 +161,7 @@ const fetchMetrics = async () => {
     addProduct,
     deleteProduct: removeProduct,
     editProduct,
-    //metrics,
     fetchMetrics,
-    //filteredProducts,
     sortCriteria,
     toggleSort,
     applyFilters,
@@ -174,10 +169,8 @@ const fetchMetrics = async () => {
     page,
     fetchProducts,
     resetFilters,
-    //revisar, eliminar
     fetchProductsPage,
     currentPage,
     totalPages,
-    setCurrentPage
   };
 };
