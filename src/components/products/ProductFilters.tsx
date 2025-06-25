@@ -1,24 +1,28 @@
-import React, { useState } from 'react';
-import { Product } from '../../types/Product';
+import React, { useState, useEffect } from 'react';
+import { getAllCategories } from '../../services/api'; 
 
 interface Props {
-  products: Product[];
   onFilter: (filters: {
-    name: string;
-    categories: string[];
-    inStockOnly: boolean;
+    name?: string;
+    categories?: string[];
+    inStockOnly?: boolean;
   }) => void;
-  onReset: () => void;
+  onReset?: () => void;
 }
 
-const ProductFilters: React.FC<Props> = ({ products, onFilter, onReset }) => {
+const ProductFilters: React.FC<Props> = ({ onFilter, onReset }) => {
   const [name, setName] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [inStockOnly, setInStockOnly] = useState(false);
+  const [categories, setCategories] = useState<string[]>([]);
 
-  const categories = Array.from(new Set(products.map(p => p.category)));
+  useEffect(()=> {
+    getAllCategories().then(setCategories).catch(err => {
+      console.error('Error loading categories', err);
+    });
+  }, []);
 
-  const handleCategoryChange = (category: string) => {
+  const toggleCategory = (category: string) => {
     setSelectedCategories(prev =>
       prev.includes(category)
         ? prev.filter(c => c !== category)
@@ -27,40 +31,44 @@ const ProductFilters: React.FC<Props> = ({ products, onFilter, onReset }) => {
   };
 
   const handleApply = () => {
-    onFilter({ name, categories: selectedCategories, inStockOnly });
+    onFilter({
+      name,
+      categories: selectedCategories,
+      inStockOnly,
+    });
   };
 
   const handleReset = () => {
     setName('');
     setSelectedCategories([]);
     setInStockOnly(false);
-    onReset();
+    onReset?.();
   };
 
   return (
-    <div className="bg-gray-50 p-4 rounded shadow">
-      <h3 className="text-lg font-semibold mb-3">Filters</h3>
+    <div className="bg-gray-100 p-4 rounded shadow mb-6">
+      <h3 className="text-lg font-bold mb-2">Filters</h3>
 
       <div className="mb-3">
-        <label className="block font-medium">Name:</label>
+        <label className="block font-medium mb-1">Name:</label>
         <input
           type="text"
           value={name}
           onChange={e => setName(e.target.value)}
+          className="w-full border px-3 py-1 rounded"
           placeholder="Search by name..."
-          className="w-full px-3 py-2 border rounded mt-1"
         />
       </div>
 
       <div className="mb-3">
-        <label className="block font-medium mb-1">Category:</label>
-        <div className="flex flex-wrap gap-3">
+        <label className="block font-medium mb-1">Categories:</label>
+        <div className="flex flex-wrap gap-4">
           {categories.map(category => (
-            <label key={category} className="flex items-center gap-2">
+            <label key={category} className="flex items-center gap-1">
               <input
                 type="checkbox"
                 checked={selectedCategories.includes(category)}
-                onChange={() => handleCategoryChange(category)}
+                onChange={() => toggleCategory(category)}
               />
               {category}
             </label>
@@ -68,12 +76,12 @@ const ProductFilters: React.FC<Props> = ({ products, onFilter, onReset }) => {
         </div>
       </div>
 
-      <div className="mb-4">
+      <div className="mb-3">
         <label className="flex items-center gap-2">
           <input
             type="checkbox"
             checked={inStockOnly}
-            onChange={() => setInStockOnly(prev => !prev)}
+            onChange={e => setInStockOnly(e.target.checked)}
           />
           Only in stock
         </label>
@@ -84,7 +92,7 @@ const ProductFilters: React.FC<Props> = ({ products, onFilter, onReset }) => {
           onClick={handleApply}
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
-          Search
+          Apply Filters
         </button>
         <button
           onClick={handleReset}
